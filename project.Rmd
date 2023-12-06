@@ -37,6 +37,9 @@ library("rstatix")
 library("ggplot2")
 library("dlookr")
 library("editrules")
+library("htmltools")
+library("kableExtra")
+library("frequency")
 ```
 
 ## Missing Values: all the rows are complete
@@ -140,6 +143,15 @@ summary(violated)
 plot(violated)
 ```
 
+
+
+
+```{r}
+tabl1<-c("0-10 kPLN","10-20 kPLN","20-30 kPLN","30-40 kPLN","40-50 kPLN")
+limits<-cut(Biedronki$`gross income`,seq(0,50,by=10),labels=tabl1)
+table1<-freq(limits,type="html")
+kbl(table1)
+```
 
 
 
