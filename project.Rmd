@@ -1,0 +1,145 @@
+---
+title: "Searching for mistakes"
+author: "Sofia Animato"
+date: "2023-11-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+library("rvest")
+library("dplyr")
+library("tidyr")
+library("rstatix")
+library("ggplot2")
+library("dlookr")
+```
+
+# Missing Values: all the rows are complete
+
+```{r count-demo, echo=TRUE}
+sum(complete.cases(Biedronki))
+nrow(Biedronki[complete.cases(Biedronki), ])/nrow(Biedronki)*100
+```
+
+## Identify outliers: 
+# Identified outliers for Total
+
+```{r}
+Biedronki %>%
+  group_by(Branch) %>%
+  identify_outliers(`Total`)
+```
+
+```{r boxplot, echo=TRUE}
+boxplot(Total~Branch, data=Biedronki)
+```
+
+# Identified outliers for cogs
+```{r}
+Biedronki %>%
+  group_by(Branch) %>%
+  identify_outliers('cogs')
+```
+
+```{r boxplot, echo=TRUE}
+boxplot(cogs~Branch, data=Biedronki)
+```
+
+# Identified outliers for Tax 5%
+```{r}
+Biedronki %>%
+  group_by(Branch) %>%
+  identify_outliers(`Tax 5%`)
+```
+
+# Identified outliers for gross income
+```{r}
+Biedronki %>%
+  group_by(Branch) %>%
+  identify_outliers(`gross income`)
+```
+ 
+## Imputate outliers and data correction
+# Imputate outlier for "Total"
+```{r}
+Biedronki %>%
+   mutate(Total_imp = imputate_outlier(Biedronki, Total, method = "capping")) %>%
+  summary()
+```
+
+# Imputate outlier for "Cogs"
+```{r}
+Biedronki %>%
+   mutate(Cogs_imp = imputate_outlier(Biedronki, cogs, method = "capping")) %>%
+  summary()
+```
+
+# Imputate outlier for "Tax 5%"
+```{r}
+Biedronki %>%
+   mutate(Tax_5_imp = imputate_outlier(Biedronki, `Tax 5%`, method = "capping")) %>%
+  summary()
+```
+
+# Imputate outlier for "gross income"
+```{r}
+Biedronki %>%
+   mutate(gross_income_imp = imputate_outlier(Biedronki, `gross income`, method = "capping")) %>%
+  summary()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
