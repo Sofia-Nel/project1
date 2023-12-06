@@ -36,9 +36,10 @@ library("tidyr")
 library("rstatix")
 library("ggplot2")
 library("dlookr")
+library("editrules")
 ```
 
-# Missing Values: all the rows are complete
+## Missing Values: all the rows are complete
 
 ```{r count-demo, echo=TRUE}
 sum(complete.cases(Biedronki))
@@ -46,6 +47,7 @@ nrow(Biedronki[complete.cases(Biedronki), ])/nrow(Biedronki)*100
 ```
 
 ## Identify outliers: 
+
 # Identified outliers for Total
 
 ```{r}
@@ -112,9 +114,31 @@ Biedronki %>%
   summary()
 ```
 
+## Rules to follow
+We have the following rules:
 
+-   Gross Income must be positive.
 
+-   The rating must be greater than 6.
 
+```{r echo = TRUE}
+RULE <- editset(c("gross_income > 0"))
+```
+
+```{r echo = TRUE}
+RULE <- editset(c("Rating > 6"))
+```
+
+# How many times the rule has been violated
+
+```{r echo = TRUE}
+violated <- violatedEdits(RULE, Biedronki)
+summary(violated)
+```
+
+```{r echo = TRUE}
+plot(violated)
+```
 
 
 
