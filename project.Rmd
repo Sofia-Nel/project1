@@ -76,12 +76,22 @@ Biedronki %>%
   identify_outliers(`Tax 5%`)
 ```
 
+```{r boxplot, echo=TRUE}
+boxplot(Biedronki$`Tax 5%`~Branch, data=Biedronki)
+```
+
+
 # Identified outliers for gross income
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
   identify_outliers(`gross income`)
 ```
+ 
+```{r boxplot, echo=TRUE}
+boxplot(Biedronki$`gross income`~Branch, data=Biedronki)
+```
+ 
  
 ## Imputate outliers and data correction
 # Imputate outlier for "Total"
