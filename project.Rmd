@@ -248,7 +248,7 @@ stable.p <- ggtexttable(stable, rows = NULL,
                         theme = ttheme("mOrange"))
 # Draw text
 #::::::::::::::::::::::::::::::::::::::
-text <- paste("Gross income per supermarket by 3 cities - Biedronki.",
+text <- paste("Gross income in kPLN per supermarket by 3 cities - Biedronki.",
               "Random sample of 200 Biedronki.",
                sep = " ")
 text.p <- ggparagraph(text = text, face = "italic", size = 11, color = "black")
@@ -258,6 +258,33 @@ ggarrange(density.p, stable.p, text.p,
           heights = c(1, 0.5, 0.3))
 ```
 
+
+
+
+## Summary tables (do 2 or 3 examples)
+
+```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+raport <-
+  list("Price in kPLN" =
+       list("Min"       = ~ min(Biedronki$`gross income`),
+            "Max"       = ~ max(Biedronki$`gross income`),
+            "Q1"        = ~ quantile(Biedronki$`gross income`,0.25),
+            "Median" = ~ round(median(Biedronki$`gross income`),2),
+            "Q3"        = ~ quantile(Biedronki$`gross income`,0.75),
+            "Mean" = ~ round(mean(Biedronki$`gross income`),2),
+            "Sd" = ~ round(sd(Biedronki$`gross income`),2),
+             "IQR" = ~ round(iqr(Biedronki$`gross income`),2),
+            "Sx" = ~ round(iqr(Biedronki$`gross income`)/2,2),
+            "Var %" = ~ round((sd(Biedronki$`gross    income`)/mean(Biedronki$`gross income`)),2),
+            "IQR Var %" = ~ round((iqr(Biedronki$`gross income`)/median(Biedronki$`gross income`)),2),
+            "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
+            "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
+            ))
+tabela<-summary_table(Biedronki, summaries = raport, by = c('Payment'))
+
+kbl(tabela, digits = 2,
+  caption="Table 1. Biedronki - gross income in kPLN by type of payment.",  col.names = c('Cash', 'Credit card', 'Ewallet')) %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
+```
 
  
  
