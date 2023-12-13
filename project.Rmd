@@ -197,8 +197,8 @@ library(AER)
 ```{r}
 tabl1<-c("0-10 kPLN","10-20 kPLN","20-30 kPLN","30-40 kPLN","40-50 kPLN")
 limits<-cut(Biedronki$`gross income`,seq(0,50,by=10),labels=tabl1)
-table1<-freq(limits,type="html")
-kbl(table1)
+tablee1<-freq(limits,type="html")
+kbl(tablee1)
 ```
 
 ```{r tai, echo=FALSE}
@@ -266,7 +266,7 @@ ggarrange(density.p, stable.p, text.p,
 ```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
 Biedronki$Payment <- factor(Biedronki$Payment)
 
-raport <-
+raport1 <-
   list("Price in kPLN" =
        list("Min"       = ~ min(Biedronki$`gross income`),
             "Max"       = ~ max(Biedronki$`gross income`),
@@ -282,16 +282,16 @@ raport <-
             "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
             "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
             ))
-tabela<-summary_table(Biedronki, summaries = raport, by = c('Payment'))
+tabela1<-summary_table(Biedronki, summaries = raport1, by = c('Payment'))
 
-kbl(tabela, digits = 3,
+kbl(tabela1, digits = 3,
   caption="Table 1. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
  
 
 ```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
-raport <-
+raport2 <-
   list("Price in kPLN" =
        list("Min"       = ~ min(Biedronki$`gross income`),
             "Max"       = ~ max(Biedronki$`gross income`),
@@ -307,17 +307,17 @@ raport <-
             "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
             "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
             ))
-tabela<-summary_table(Biedronki, summaries = raport, by = c('Customer type'))
+tabela2<-summary_table(Biedronki, summaries = raport2, by = c('Customer type'))
 
-kbl(tabela, digits = 2,
-  caption="Table 1. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
+kbl(tabela2, digits = 2,
+  caption="Table 2. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
  
  
 ``````{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
 Biedronki$Payment <- factor(Biedronki$Payment)
 
-raport <-
+raport3 <-
   list("Price in kPLN" =
        list("Min"       = ~ min(Biedronki$`gross income`),
             "Max"       = ~ max(Biedronki$`gross income`),
@@ -333,11 +333,28 @@ raport <-
             "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
             "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
             ))
-tabela<-summary_table(Biedronki, summaries = raport, by = c('Product line'))
+tabela3<-summary_table(Biedronki, summaries = raport3, by = c('Product line'))
 
-kbl(tabela, digits = 3,
-  caption="Table 1. Biedronki - gross income in kPLN by type of product line.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
+kbl(tabela3, digits = 3,
+  caption="Table 3. Biedronki - gross income in kPLN by type of product line.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
+ 
+ 
+
+ ## 
+
+```{r histogram, echo=FALSE}
+hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
+     main="Gross income in kPLN - Biedronki")
+lines(density(Biedronki$`gross income`[Biedronki$`Product line`=="Electronic accessories"]),col=2)
+lines(density(Biedronki$`gross income`[Biedronki$`Product line`=="Fashion accessories"]),col=3)
+lines(density(Biedronki$`gross income`[Biedronki$`Product line`=="Food and beverages"]),col=4)
+legend("topright", legend=c("Electronic accessories", "Fashion accessories", "Food and beverages"),
+       col=c(2,3,4), lty=1:2, horiz=FALSE, box.lty=0, cex=0.8)
+```
+
+ 
+ 
  
  
