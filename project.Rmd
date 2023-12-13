@@ -50,7 +50,7 @@ sum(complete.cases(Biedronki))
 nrow(Biedronki[complete.cases(Biedronki), ])/nrow(Biedronki)*100
 ```
 
-## Identify outliers: 
+## Identify outliers:
 
 # Identified outliers for Total
 
@@ -65,6 +65,7 @@ boxplot(Total~Branch, data=Biedronki)
 ```
 
 # Identified outliers for cogs
+
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
@@ -76,6 +77,7 @@ boxplot(cogs~Branch, data=Biedronki)
 ```
 
 # Identified outliers for Tax 5%
+
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
@@ -83,14 +85,17 @@ Biedronki %>%
 ```
 
 # Identified outliers for gross income
+
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
   identify_outliers(`gross income`)
 ```
- 
+
 ## Imputate outliers and data correction
+
 # Imputate outlier for "Total"
+
 ```{r}
 Biedronki %>%
    mutate(Total_imp = imputate_outlier(Biedronki, Total, method = "capping")) %>%
@@ -98,6 +103,7 @@ Biedronki %>%
 ```
 
 # Imputate outlier for "Cogs"
+
 ```{r}
 Biedronki %>%
    mutate(Cogs_imp = imputate_outlier(Biedronki, cogs, method = "capping")) %>%
@@ -105,6 +111,7 @@ Biedronki %>%
 ```
 
 # Imputate outlier for "Tax 5%"
+
 ```{r}
 Biedronki %>%
    mutate(Tax_5_imp = imputate_outlier(Biedronki, `Tax 5%`, method = "capping")) %>%
@@ -112,6 +119,7 @@ Biedronki %>%
 ```
 
 # Imputate outlier for "gross income"
+
 ```{r}
 Biedronki %>%
    mutate(gross_income_imp = imputate_outlier(Biedronki, `gross income`, method = "capping")) %>%
@@ -119,6 +127,7 @@ Biedronki %>%
 ```
 
 ## Rules to follow
+
 We have the following rules:
 
 -   Gross Income must be positive.
@@ -154,25 +163,138 @@ kbl(table1)
 ```
 
 
+## Univariate Statistics
+
+## Frequency Tables
+
+##libraries
+
+```{r}
+install.packages(c('qwraps2', 'arsenal', 'e1071', 'haven', 'papeR', 'dplyr', 'tidyverse', 'kableExtra', 'summarytools', 'classInt', 'pastecs', 'reporttools', 'desctable', 'psych', 'frequency', 'ggpubr', 'ggforce', 'ggdist', 'gghalves', 'gtsummary','AER','kable'))
+```
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+options(qwraps2_markup = "markdown")
+library(qwraps2)
+library(arsenal)
+library(e1071)
+library(haven)
+library(papeR)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(summarytools)
+library(classInt)
+library(pastecs)
+library(reporttools)
+library(desctable)
+library(psych)
+library(ggpubr)
+library(ggforce)
+library(ggdist)
+library(gghalves)
+library(gtsummary)
+library(AER)
+library(kableExtra)
+```
 
 
 
+```{r}
+tabl1<-c("0-10 kPLN","10-20 kPLN","20-30 kPLN","30-40 kPLN","40-50 kPLN")
+limits<-cut(Biedronki$`gross income`,seq(0,50,by=10),labels=tabl1)
+table1<-freq(limits,type="html")
+kbl(table1)
+```
 
+```{r tai, echo=FALSE}
+kbl(table1,caption = "Gross income - Biedronka - values in kPLN") %>%
+    kable_material(c("striped", "hover"))
+tab1<-classIntervals(Biedronki$`gross income`,n=10,style="fixed",fixedBreaks=seq(0,50,by=10))
+jenks.tests(tab1)
+```
 
+## Basic plots
 
+```{r histogram, echo=FALSE}
+hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
+     main="Gross income in kPLN - Biedronki")
+lines(density(Biedronki$`gross income`[Biedronki$City=="Yangon"]),col=2)
+lines(density(Biedronki$`gross income`[Biedronki$City=="Naypyitaw"]),col=3)
+lines(density(Biedronki$`gross income`[Biedronki$City=="Mandalay"]),col=4)
+legend("topright", legend=c("Yagon", "Naypyitaw", "Mandalay"),
+       col=c(2,3,4), lty=1:2, horiz=FALSE, box.lty=0, cex=0.8)
 
+```
 
+```{r boxplot, echo=FALSE}
+boxplot(Biedronki$`gross income`~Biedronki$City)
 
+```
 
+## ggplot2 plots
 
+```{r histogram2, echo=FALSE}
+# Density plot of "price_PLN"
+#::::::::::::::::::::::::::::::::::::::
+density.p <- ggdensity(Biedronki, x = "gross income", 
+                       fill = "City", palette = "jco")+
+  stat_overlay_normal_density(color = "red", linetype = "dashed")
 
+# Draw the summary table of price_PLN
+#::::::::::::::::::::::::::::::::::::::
+# Compute descriptive statistics by groups
+stable <- desc_statby(Biedronki, measure.var = "gross income",
+                      grps = "City")
+stable <- stable[, c("City", "length", "mean", "sd")]
+# Summary table plot, medium orange theme
+stable.p <- ggtexttable(stable, rows = NULL, 
+                        theme = ttheme("mOrange"))
+# Draw text
+#::::::::::::::::::::::::::::::::::::::
+text <- paste("Gross income in kPLN per supermarket by 3 cities - Biedronki.",
+              "Random sample of 200 Biedronki.",
+               sep = " ")
+text.p <- ggparagraph(text = text, face = "italic", size = 11, color = "black")
+# Arrange the plots on the same page
+ggarrange(density.p, stable.p, text.p, 
+          ncol = 1, nrow = 3,
+          heights = c(1, 0.5, 0.3))
+```
 
+## Summary tables (do 2 or 3 examples)
 
+```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+raport <-
+  list("Price in kPLN" =
+       list("Min"       = ~ min(Biedronki$`gross income`),
+            "Max"       = ~ max(Biedronki$`gross income`),
+            "Q1"        = ~ quantile(Biedronki$`gross income`,0.25),
+            "Median" = ~ round(median(Biedronki$`gross income`),2),
+            "Q3"        = ~ quantile(Biedronki$`gross income`,0.75),
+            "Mean" = ~ round(mean(Biedronki$`gross income`),2),
+            "Sd" = ~ round(sd(Biedronki$`gross income`),2),
+             "IQR" = ~ round(iqr(Biedronki$`gross income`),2),
+            "Sx" = ~ round(iqr(Biedronki$`gross income`)/2,2),
+            "Var %" = ~ round((sd(Biedronki$`gross    income`)/mean(Biedronki$`gross income`)),2),
+            "IQR Var %" = ~ round((iqr(Biedronki$`gross income`)/median(Biedronki$`gross income`)),2),
+            "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
+            "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
+            ))
+tabela<-summary_table(Biedronki, summaries = raport, by = c('Payment'))
 
+kbl(tabela, digits = 2,
+  caption="Table 1. Biedronki - gross income in kPLN by type of payment.",  col.names = c('Cash', 'Credit card', 'Ewallet')) %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
+```
 
+# Data Frame summary
 
- 
- 
- 
- 
- 
+```{r warning=FALSE, results="asis"}
+dfSummary(Biedronki,
+          plain.ascii  = FALSE, 
+          style        = "grid", 
+          graph.magnif = 0.75, 
+          valid.col    = FALSE,
+          tmp.img.dir  = "/tmp")
+```
