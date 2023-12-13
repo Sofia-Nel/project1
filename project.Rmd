@@ -1,5 +1,4 @@
----
-title: "Searching for mistakes"
+Title: "Searching for mistakes"
 author: "Sofia Animato"
 date: "2023-11-28"
 output: html_document
@@ -36,9 +35,13 @@ library("tidyr")
 library("rstatix")
 library("ggplot2")
 library("dlookr")
+library("editrules")
+library("htmltools")
+library("kableExtra")
+library("frequency")
 ```
 
-# Missing Values: all the rows are complete
+## Missing Values: all the rows are complete
 
 ```{r count-demo, echo=TRUE}
 sum(complete.cases(Biedronki))
@@ -46,6 +49,7 @@ nrow(Biedronki[complete.cases(Biedronki), ])/nrow(Biedronki)*100
 ```
 
 ## Identify outliers: 
+
 # Identified outliers for Total
 
 ```{r}
@@ -80,17 +84,20 @@ Biedronki %>%
 boxplot(Biedronki$`Tax 5%`~Branch, data=Biedronki)
 ```
 
-
 # Identified outliers for gross income
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
   identify_outliers(`gross income`)
 ```
- 
+
+
 ```{r boxplot, echo=TRUE}
 boxplot(Biedronki$`gross income`~Branch, data=Biedronki)
 ```
+
+
+
  
  
 ## Imputate outliers and data correction
@@ -122,33 +129,136 @@ Biedronki %>%
   summary()
 ```
 
+## Rules to follow
+We have the following rules:
+
+-   Gross Income must be positive.
+
+-   The rating must be greater than 6.
+
+```{r echo = TRUE}
+RULE <- editset(c("gross_income > 0"))
+```
+
+```{r echo = TRUE}
+RULE <- editset(c("Rating > 6"))
+```
+
+# How many times the rule has been violated
+
+```{r echo = TRUE}
+violated <- violatedEdits(RULE, Biedronki)
+summary(violated)
+
+```
+
+```{r echo = TRUE}
+plot(violated)
+```
+
+## Univariate Statistics
+## Frequency Tables
+
+##libraries
+
+```{r}
+install.packages(c('qwraps2', 'arsenal', 'e1071', 'haven', 'papeR', 'dplyr', 'tidyverse', 'kableExtra', 'summarytools', 'classInt', 'pastecs', 'reporttools', 'desctable', 'psych', 'frequency', 'ggpubr', 'ggforce', 'ggdist', 'gghalves', 'gtsummary','AER'))
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+options(qwraps2_markup = "markdown")
+library(qwraps2)
+library(arsenal)
+library(e1071)
+library(haven)
+library(papeR)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(summarytools)
+library(classInt)
+library(pastecs)
+library(reporttools)
+library(desctable)
+library(psych)
+library(frequency)
+library(ggpubr)
+library(ggforce)
+library(ggdist)
+library(gghalves)
+library(gtsummary)
+library(AER)
+```
 
 
 
+```{r}
+tabl1<-c("0-10 kPLN","10-20 kPLN","20-30 kPLN","30-40 kPLN","40-50 kPLN")
+limits<-cut(Biedronki$`gross income`,seq(0,50,by=10),labels=tabl1)
+table1<-freq(limits,type="html")
+kbl(table1)
+```
+
+```{r tai, echo=FALSE}
+kbl(tabela1,caption = "Gross income - Biedronka - values in kPLN") %>%
+    kable_material(c("striped", "hover"))
+tab1<-classIntervals(Biedronki$`gross income`,n=10,style="fixed",fixedBreaks=seq(0,50,by=10))
+jenks.tests(tab1)
+```
 
 
+## Basic plots
+
+```{r histogram, echo=FALSE}
+hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
+     main="Gross income in kPLN - Biedronki")
+lines(density(Biedronki$`gross income`[Biedronki$City=="Yangon"]),col=2)
+lines(density(Biedronki$`gross income`[Biedronki$City=="Naypyitaw"]),col=3)
+lines(density(Biedronki$`gross income`[Biedronki$City=="Mandalay"]),col=4)
+legend("topright", legend=c("Yagon", "Naypyitaw", "Mandalay"),
+       col=c(2,3,4), lty=1:2, horiz=FALSE, box.lty=0, cex=0.8)
+
+```
 
 
+```{r boxplot, echo=FALSE}
+boxplot(Biedronki$`gross income`~Biedronki$City)
+
+```
+
+## ggplot2 plots
+
+```{r histogram2, echo=FALSE}
+# Density plot of "price_PLN"
+#::::::::::::::::::::::::::::::::::::::
+density.p <- ggdensity(Biedronki, x = "gross income", 
+                       fill = "City", palette = "jco")+
+  stat_overlay_normal_density(color = "red", linetype = "dashed")
+
+# Draw the summary table of price_PLN
+#::::::::::::::::::::::::::::::::::::::
+# Compute descriptive statistics by groups
+stable <- desc_statby(Biedronki, measure.var = "gross income",
+                      grps = "City")
+stable <- stable[, c("City", "length", "mean", "sd")]
+# Summary table plot, medium orange theme
+stable.p <- ggtexttable(stable, rows = NULL, 
+                        theme = ttheme("mOrange"))
+# Draw text
+#::::::::::::::::::::::::::::::::::::::
+text <- paste("Gross income per supermarket by 3 cities - Biedronki.",
+              "Random sample of 200 Biedronki.",
+               sep = " ")
+text.p <- ggparagraph(text = text, face = "italic", size = 11, color = "black")
+# Arrange the plots on the same page
+ggarrange(density.p, stable.p, text.p, 
+          ncol = 1, nrow = 3,
+          heights = c(1, 0.5, 0.3))
+```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
  
  
  
