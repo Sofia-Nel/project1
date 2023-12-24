@@ -39,7 +39,10 @@ library("dlookr")
 library("editrules")
 library("htmltools")
 library("kableExtra")
+<<<<<<< HEAD
 library("classInt")
+=======
+>>>>>>> 803c68d30f0b1f384149bc3f986beda2917cbbee
 library("frequency")
 ```
 
@@ -208,6 +211,7 @@ table1<-freq(limits,type="html")
 kbl(table1)
 ```
 
+<<<<<<< HEAD
 ```{r tai, echo=FALSE}
 kbl(table1,caption = "Gross income - Biedronka - values in kPLN") %>%
     kable_material(c("striped", "hover"))
@@ -262,6 +266,10 @@ ggarrange(density.p, stable.p, text.p,
           ncol = 1, nrow = 3,
           heights = c(1, 0.5, 0.3))
 ```
+=======
+
+
+>>>>>>> 803c68d30f0b1f384149bc3f986beda2917cbbee
 
 
 ## Summary tables (do 2 or 3 examples)
