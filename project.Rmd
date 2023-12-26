@@ -39,10 +39,7 @@ library("dlookr")
 library("editrules")
 library("htmltools")
 library("kableExtra")
-<<<<<<< HEAD
 library("classInt")
-=======
->>>>>>> 803c68d30f0b1f384149bc3f986beda2917cbbee
 library("frequency")
 ```
 
@@ -53,7 +50,7 @@ sum(complete.cases(Biedronki))
 nrow(Biedronki[complete.cases(Biedronki), ])/nrow(Biedronki)*100
 ```
 
-## Identify outliers:
+#### Identify outliers:
 
 # Identified outliers for Total
 
@@ -95,7 +92,7 @@ Biedronki %>%
   identify_outliers(`gross income`)
 ```
 
-## Imputate outliers and data correction
+#### Imputate outliers and data correction
 
 # Imputate outlier for "Total"
 
@@ -129,7 +126,7 @@ Biedronki %>%
   summary()
 ```
 
-## Rules to follow
+#### Rules to follow
 
 We have the following rules:
 
@@ -156,7 +153,7 @@ summary(violated)
 plot(violated)
 ```
 
-## Summary tables
+#### Summary tables
 
 ```{r}
 tabl1<-c("0-10 kPLN", "10-20 kPLN", "20-30 kPLN", "30-40 kPLN", "40-50 kPLN")
@@ -166,11 +163,11 @@ kbl(table1)
 ```
 
 
-## Univariate Statistics
+#### Univariate Statistics
 
 ## Frequency Tables
 
-##libraries
+#libraries
 
 ```{r}
 install.packages(c('qwraps2', 'arsenal', 'e1071', 'haven', 'papeR', 'dplyr', 'tidyverse', 'kableExtra', 'summarytools', 'classInt', 'pastecs', 'reporttools', 'desctable', 'psych', 'frequency', 'ggpubr', 'ggforce', 'ggdist', 'gghalves', 'gtsummary','AER','kable'))
@@ -219,7 +216,7 @@ tab1<-classIntervals(Biedronki$`gross income`,n=10,style="fixed",fixedBreaks=seq
 jenks.tests(tab1)
 ```
 
-## Basic plots
+### Basic plots
 
 ```{r histogram, echo=FALSE}
 hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
@@ -266,10 +263,6 @@ ggarrange(density.p, stable.p, text.p,
           ncol = 1, nrow = 3,
           heights = c(1, 0.5, 0.3))
 ```
-=======
-
-
->>>>>>> 803c68d30f0b1f384149bc3f986beda2917cbbee
 
 
 ## Summary tables (do 2 or 3 examples)
@@ -299,8 +292,8 @@ kbl(tabela1, digits = 3,
   caption="Table 1. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
- 
 
+ 
 ```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
 raport2 <-
   list("Price in kPLN" =
@@ -353,7 +346,7 @@ kbl(tabela3, digits = 3,
  
  
 
- ## 
+## 
 
 ```{r histogram, echo=FALSE}
 hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
@@ -366,7 +359,7 @@ legend("topright", legend=c("Electronic accessories", "Fashion accessories", "Fo
 ```
 
 
-# Data Frame summary
+## Data Frame summary
 
 ```{r warning=FALSE, results="asis"}
 dfSummary(Biedronki,
