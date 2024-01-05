@@ -166,7 +166,7 @@ install.packages(c('qwraps2', 'arsenal', 'e1071', 'haven', 'papeR', 'dplyr', 'ti
 ```
 
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(qwraps2_markup = "markdown")
 library(qwraps2)
@@ -190,6 +190,7 @@ library(ggdist)
 library(gghalves)
 library(gtsummary)
 library(AER)
+library(ggstatsplot)
 ```
 
 
@@ -342,7 +343,7 @@ kbl(tabela3, digits = 3,
  
  
 
- ## 
+
 
 ```{r histogram, echo=FALSE}
 hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
@@ -354,7 +355,80 @@ legend("topright", legend=c("Electronic accessories", "Fashion accessories", "Fo
        col=c(2,3,4), lty=1:2, horiz=FALSE, box.lty=0, cex=0.8)
 ```
 
+
+# statistical inference
  
+## Gross income and City
  
+```{r}
+Biedronki$City <- as.factor(Biedronki$City)
+Biedronki$income <- as.numeric(Biedronki$`gross income`)
+
+ggbetweenstats(
+  data  = Biedronki,
+  y     = income,
+  x     = City,
+  title = "Distribution of Gross Income  across City"
+)
+```
  
+ Gross income is not significant different in cities.
+ 
+## Rating and Customer type 
+
+```{r}
+Biedronki$Customer <- as.factor(Biedronki$`Customer type`)
+Biedronki$Rating <- as.numeric(Biedronki$Rating)
+
+ggbetweenstats(
+  data  = Biedronki,
+  y     = Rating,
+  x     = Customer,
+  title = "Distribution of Rating across Customer Type"
+)
+```
+
+Rating is not significant different by customer type. 
+
+## Quantatity and Gender
+
+```{r}
+Biedronki$Gender <- as.factor(Biedronki$Gender)
+Biedronki$Quantity <- as.numeric(Biedronki$Quantity)
+
+ggbetweenstats(
+  data  = Biedronki,
+  y     = Quantity,
+  x     = Gender,
+  title = "Distribution of quantatity across gender"
+)
+```
+Quantity (number of products purchased by the customer) is significant different by gender. Women buy more products on average than men.
+
+## Unit price and Product Line
+
+```{r}
+Biedronki$Line <- as.factor(Biedronki$`Product line`)
+Biedronki$Unit <- as.numeric(Biedronki$`Unit price`)
+
+ggbetweenstats(
+  data  = Biedronki,
+  y     = Unit,
+  x     = Line,
+  title = "Distribution of unit price across product line"
+)
+```
+
+ Unit price of each product is not significant different by product line. 
+ 
+## Bivariate Analysis (Correlation)
+ 
+```{r}
+ggcorrmat(
+  data     = Biedronki,
+  colors   = c("#B2182B", "white", "#4D4D4D"),
+  title    = "Correlalogram for Biedronki dataset",
+)
+```
+
  
