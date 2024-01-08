@@ -435,7 +435,7 @@ ggbetweenstats(
 )
 ```
 
-## Quantatity and Gender
+## Quantity and Gender
 
 The resulting plot provides a clear overview of how the distribution of quantity varies between genders. This type of visualization is valuable for identifying potential differences or patterns in purchasing behavior across different gender groups, aiding in the exploration of gender-related variations within the dataset.Our conclusion is that Quantity, thus number of products purchased by the customer, is significant different by gender. Indeed, women buy more products on average than men.
 
@@ -482,8 +482,36 @@ ggcorrmat(
 ```
 
 
+# Final conclusion and considerations
+
+In summary, the data analysis conducted on this dataset provides valuable insights that can inform strategic decision-making for the supermarket chain. Key findings and potential strategies include:
+
+####Customer Demographics and Marketing:
+
+The majority of observations fall within lower income levels, suggesting a focus on targeted marketing strategies for cost-effective products and promotions.
+
+####Geographical Considerations:
+Minor variations in gross income between cities suggest the potential for location-specific marketing strategies. Tailor promotions or the introduction of region-specific products based on consistent gross income distribution across different cities may be the best options. 
+
+####Gender-Specific Marketing:
+Significant differences in purchasing behavior between genders highlight the opportunity for gender-specific marketing campaigns. Develop strategies that cater to the preferences of each gender, recognizing that women tend to buy more products on average.
+
+####Pricing Strategies:
+since most of the costumers falls in the lowest gross income category, maintain consistent pricing strategies across product lines due to the lack of significant differences in unit prices may be the best strategy. furthermore, the Implementation of strategic pricing promotions or discounts to attract price-sensitive customers, particularly those with lower income levels, could boost the sells. of course, it's crucial to periodically analyze and adjust promotional strategies based on evolving customer behavior patterns.
+
+####Correlation-Based Strategies:
+Leverage identified correlations to inform cross-selling or bundling strategies, enhancing customer engagement and satisfaction. The best behaviour would be to consider promotions that capitalize on relationships such as the positive correlation between "rating" and "quantity."
+
+####Market Segmentation Refinement:
+Even though it's possible to get, from this dataset, that the most profitable segment could be women centered, it' important to continuously refine market segmentation based on the observed consistency in gross income distribution and purchasing behaviour. it's fundamental to keep monitoring and gathering additional customer behavior data for further segmentation and personalized marketing strategies.
+
+####Customer Engagement Programs:
+
+finally, the developement of customer engagement programs that reward loyalty across payment types, customer types, and product lines may be effective to create loyal relatioships, positive spillovers on the market and positive word fo mouth, which is one of the strongest and cheapest forms of promotion nowadays.
+For instance, encouraging repeat business through personalized offers and promotions to enhance overall customer satisfaction may lead to loyalty and all the positive spillovers mentioned above.
 
 
+These strategies collectively aim to drive sales, enhance customer satisfaction, and contribute to the overall success of 'Biedronki' supermarkets. Regular analysis and adaptation based on customer behavior and market dynamics will be crucial for sustained success in a competitive retail landscape.
 
 
 
