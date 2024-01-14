@@ -29,16 +29,39 @@ plot(pressure)
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ```{r}
-library("rvest")
-library("dplyr")
-library("tidyr")
-library("rstatix")
-library("ggplot2")
-library("dlookr")
-library("editrules")
-library("htmltools")
-library("kableExtra")
-library("frequency")
+library(rvest)
+library(dplyr)
+library(tidyr)
+library(rstatix)
+library(ggplot2)
+library(dlookr)
+library(editrules)
+library(htmltools)
+library(kableExtra)
+library(frequency)
+library(qwraps2)
+library(arsenal)
+library(e1071)
+library(haven)
+library(papeR)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(summarytools)
+library(classInt)
+library(pastecs)
+library(reporttools)
+library(desctable)
+library(psych)
+library(frequency)
+library(ggpubr)
+library(ggforce)
+library(ggdist)
+library(gghalves)
+library(gtsummary)
+library(AER)
+library(ggstatsplot)
+library(ggplot2)
 ```
 
 ## Missing Values: all the rows are complete
@@ -155,44 +178,41 @@ summary(violated)
 ```{r echo = TRUE}
 plot(violated)
 ```
+## Data Visualization
+```{r}
+ggplot(Biedronki,
+ aes(x = Biedronki$`Product line`,
+ y = Biedronki$`gross income`)) +
+  geom_col()
+
+```
+
+```{r}
+ggplot(data = Biedronki, mapping = aes(x = Branch, y = Biedronki$Rating)) +
+    geom_boxplot()
+```
+```{r}
+ggplot(data = Biedronki) + 
+  stat_summary(
+    mapping = aes(x = City, y = cogs),
+    fun.min = min,
+    fun.max = max,
+    fun = median
+  )
+```
+```{r}
+ggplot(Biedronki,
+ aes(x = Payment,
+ y = Biedronki$`Tax 5%`,
+ fill = Gender)) +
+ geom_col() +
+ scale_fill_brewer( palette = "Dark2") +
+ facet_grid(~ City)
+```
+
 
 ## Univariate Statistics
 ## Frequency Tables
-
-##libraries
-
-```{r}
-install.packages(c('qwraps2', 'arsenal', 'e1071', 'haven', 'papeR', 'dplyr', 'tidyverse', 'kableExtra', 'summarytools', 'classInt', 'pastecs', 'reporttools', 'desctable', 'psych', 'frequency', 'ggpubr', 'ggforce', 'ggdist', 'gghalves', 'gtsummary','AER'))
-```
-
-
-```{r message=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-options(qwraps2_markup = "markdown")
-library(qwraps2)
-library(arsenal)
-library(e1071)
-library(haven)
-library(papeR)
-library(dplyr)
-library(tidyverse)
-library(kableExtra)
-library(summarytools)
-library(classInt)
-library(pastecs)
-library(reporttools)
-library(desctable)
-library(psych)
-library(frequency)
-library(ggpubr)
-library(ggforce)
-library(ggdist)
-library(gghalves)
-library(gtsummary)
-library(AER)
-library(ggstatsplot)
-```
-
 
 
 ```{r}
