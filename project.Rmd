@@ -1,5 +1,4 @@
----
-title: "Searching for mistakes"
+Title: "Searching for mistakes"
 author: "Sofia Animato"
 date: "2023-11-28"
 output: html_document
@@ -30,15 +29,42 @@ plot(pressure)
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ```{r}
-library("rvest")
-library("dplyr")
-library("tidyr")
-library("rstatix")
-library("ggplot2")
-library("dlookr")
+library(rvest)
+library(dplyr)
+library(tidyr)
+library(rstatix)
+library(ggplot2)
+library(dlookr)
+library(editrules)
+library(htmltools)
+library(kableExtra)
+library(frequency)
+library(qwraps2)
+library(arsenal)
+library(e1071)
+library(haven)
+library(papeR)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(summarytools)
+library(classInt)
+library(pastecs)
+library(reporttools)
+library(desctable)
+library(psych)
+library(frequency)
+library(ggpubr)
+library(ggforce)
+library(ggdist)
+library(gghalves)
+library(gtsummary)
+library(AER)
+library(ggstatsplot)
+library(ggplot2)
 ```
 
-# Missing Values: all the rows are complete
+## Missing Values: all the rows are complete
 
 ```{r count-demo, echo=TRUE}
 sum(complete.cases(Biedronki))
@@ -46,6 +72,7 @@ nrow(Biedronki[complete.cases(Biedronki), ])/nrow(Biedronki)*100
 ```
 
 ## Identify outliers: 
+
 # Identified outliers for Total
 
 ```{r}
@@ -80,17 +107,20 @@ Biedronki %>%
 boxplot(Biedronki$`Tax 5%`~Branch, data=Biedronki)
 ```
 
-
 # Identified outliers for gross income
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
   identify_outliers(`gross income`)
 ```
- 
+
+
 ```{r boxplot, echo=TRUE}
 boxplot(Biedronki$`gross income`~Branch, data=Biedronki)
 ```
+
+
+
  
  
 ## Imputate outliers and data correction
@@ -122,34 +152,303 @@ Biedronki %>%
   summary()
 ```
 
+## Rules to follow
+We have the following rules:
+
+-   Gross Income must be positive.
+
+-   The rating must be greater than 6.
+
+```{r echo = TRUE}
+RULE <- editset(c("gross_income > 0"))
+```
+
+```{r echo = TRUE}
+RULE <- editset(c("Rating > 6"))
+```
+
+# How many times the rule has been violated
+
+```{r echo = TRUE}
+violated <- violatedEdits(RULE, Biedronki)
+summary(violated)
+
+```
+
+```{r echo = TRUE}
+plot(violated)
+```
+## Data Visualization
+```{r}
+ggplot(Biedronki,
+ aes(x = Biedronki$`Product line`,
+ y = Biedronki$`gross income`)) +
+  geom_col()
+
+```
+
+```{r}
+ggplot(data = Biedronki, mapping = aes(x = Branch, y = Biedronki$Rating)) +
+    geom_boxplot()
+```
+```{r}
+ggplot(data = Biedronki) + 
+  stat_summary(
+    mapping = aes(x = City, y = cogs),
+    fun.min = min,
+    fun.max = max,
+    fun = median
+  )
+```
+```{r}
+ggplot(Biedronki,
+ aes(x = Payment,
+ y = Biedronki$`Tax 5%`,
+ fill = Gender)) +
+ geom_col() +
+ scale_fill_brewer( palette = "Dark2") +
+ facet_grid(~ City)
+```
+
+
+## Univariate Statistics
+## Frequency Tables
+
+
+```{r}
+tabl1<-c("0-10 kPLN","10-20 kPLN","20-30 kPLN","30-40 kPLN","40-50 kPLN")
+limits<-cut(Biedronki$`gross income`,seq(0,50,by=10),labels=tabl1)
+tablee1<-freq(limits,type="html")
+kbl(tablee1)
+```
+
+```{r tai, echo=FALSE}
+kbl(tabela1,caption = "Gross income - Biedronka - values in kPLN") %>%
+    kable_material(c("striped", "hover"))
+tab1<-classIntervals(Biedronki$`gross income`,n=10,style="fixed",fixedBreaks=seq(0,50,by=10))
+jenks.tests(tab1)
+```
+
+
+## Basic plots
+
+```{r histogram, echo=FALSE}
+hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
+     main="Gross income in kPLN - Biedronki")
+lines(density(Biedronki$`gross income`[Biedronki$City=="Yangon"]),col=2)
+lines(density(Biedronki$`gross income`[Biedronki$City=="Naypyitaw"]),col=3)
+lines(density(Biedronki$`gross income`[Biedronki$City=="Mandalay"]),col=4)
+legend("topright", legend=c("Yagon", "Naypyitaw", "Mandalay"),
+       col=c(2,3,4), lty=1:2, horiz=FALSE, box.lty=0, cex=0.8)
+
+```
+
+
+```{r boxplot, echo=FALSE}
+boxplot(Biedronki$`gross income`~Biedronki$City)
+
+```
+
+## ggplot2 plots
+
+```{r histogram2, echo=FALSE}
+# Density plot of "price_PLN"
+#::::::::::::::::::::::::::::::::::::::
+density.p <- ggdensity(Biedronki, x = "gross income", 
+                       fill = "City", palette = "jco")+
+  stat_overlay_normal_density(color = "red", linetype = "dashed")
+
+# Draw the summary table of price_PLN
+#::::::::::::::::::::::::::::::::::::::
+# Compute descriptive statistics by groups
+stable <- desc_statby(Biedronki, measure.var = "gross income",
+                      grps = "City")
+stable <- stable[, c("City", "length", "mean", "sd")]
+# Summary table plot, medium orange theme
+stable.p <- ggtexttable(stable, rows = NULL, 
+                        theme = ttheme("mOrange"))
+# Draw text
+#::::::::::::::::::::::::::::::::::::::
+text <- paste("Gross income in kPLN per supermarket by 3 cities - Biedronki.",
+              "Random sample of 200 Biedronki.",
+               sep = " ")
+text.p <- ggparagraph(text = text, face = "italic", size = 11, color = "black")
+# Arrange the plots on the same page
+ggarrange(density.p, stable.p, text.p, 
+          ncol = 1, nrow = 3,
+          heights = c(1, 0.5, 0.3))
+```
 
 
 
 
+## Summary tables (do 2 or 3 examples)
 
+```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+Biedronki$Payment <- factor(Biedronki$Payment)
 
+raport1 <-
+  list("Price in kPLN" =
+       list("Min"       = ~ min(Biedronki$`gross income`),
+            "Max"       = ~ max(Biedronki$`gross income`),
+            "Q1"        = ~ quantile(Biedronki$`gross income`,0.25),
+            "Median" = ~ round(median(Biedronki$`gross income`),2),
+            "Q3"        = ~ quantile(Biedronki$`gross income`,0.75),
+            "Mean" = ~ round(mean(Biedronki$`gross income`),2),
+            "Sd" = ~ round(sd(Biedronki$`gross income`),2),
+             "IQR" = ~ round(iqr(Biedronki$`gross income`),2),
+            "Sx" = ~ round(iqr(Biedronki$`gross income`)/2,2),
+            "Var %" = ~ round((sd(Biedronki$`gross income`)/mean(Biedronki$`gross income`)),2),
+            "IQR Var %" = ~ round((iqr(Biedronki$`gross income`)/median(Biedronki$`gross income`)),2),
+            "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
+            "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
+            ))
+tabela1<-summary_table(Biedronki, summaries = raport1, by = c('Payment'))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+kbl(tabela1, digits = 3,
+  caption="Table 1. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
+```
 
  
+
+```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+raport2 <-
+  list("Price in kPLN" =
+       list("Min"       = ~ min(Biedronki$`gross income`),
+            "Max"       = ~ max(Biedronki$`gross income`),
+            "Q1"        = ~ quantile(Biedronki$`gross income`,0.25),
+            "Median" = ~ round(median(Biedronki$`gross income`),2),
+            "Q3"        = ~ quantile(Biedronki$`gross income`,0.75),
+            "Mean" = ~ round(mean(Biedronki$`gross income`),2),
+            "Sd" = ~ round(sd(Biedronki$`gross income`),2),
+             "IQR" = ~ round(iqr(Biedronki$`gross income`),2),
+            "Sx" = ~ round(iqr(Biedronki$`gross income`)/2,2),
+            "Var %" = ~ round((sd(Biedronki$`gross income`)/mean(Biedronki$`gross income`)),2),
+            "IQR Var %" = ~ round((iqr(Biedronki$`gross income`)/median(Biedronki$`gross income`)),2),
+            "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
+            "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
+            ))
+tabela2<-summary_table(Biedronki, summaries = raport2, by = c('Customer type'))
+
+kbl(tabela2, digits = 2,
+  caption="Table 2. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
+```
  
  
+``````{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+Biedronki$Payment <- factor(Biedronki$Payment)
+
+raport3 <-
+  list("Price in kPLN" =
+       list("Min"       = ~ min(Biedronki$`gross income`),
+            "Max"       = ~ max(Biedronki$`gross income`),
+            "Q1"        = ~ quantile(Biedronki$`gross income`,0.25),
+            "Median" = ~ round(median(Biedronki$`gross income`),2),
+            "Q3"        = ~ quantile(Biedronki$`gross income`,0.75),
+            "Mean" = ~ round(mean(Biedronki$`gross income`),2),
+            "Sd" = ~ round(sd(Biedronki$`gross income`),2),
+             "IQR" = ~ round(iqr(Biedronki$`gross income`),2),
+            "Sx" = ~ round(iqr(Biedronki$`gross income`)/2,2),
+            "Var %" = ~ round((sd(Biedronki$`gross income`)/mean(Biedronki$`gross income`)),2),
+            "IQR Var %" = ~ round((iqr(Biedronki$`gross income`)/median(Biedronki$`gross income`)),2),
+            "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
+            "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
+            ))
+tabela3<-summary_table(Biedronki, summaries = raport3, by = c('Product line'))
+
+kbl(tabela3, digits = 3,
+  caption="Table 3. Biedronki - gross income in kPLN by type of product line.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
  
+ 
+
+
+
+```{r histogram, echo=FALSE}
+hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
+     main="Gross income in kPLN - Biedronki")
+lines(density(Biedronki$`gross income`[Biedronki$`Product line`=="Electronic accessories"]),col=2)
+lines(density(Biedronki$`gross income`[Biedronki$`Product line`=="Fashion accessories"]),col=3)
+lines(density(Biedronki$`gross income`[Biedronki$`Product line`=="Food and beverages"]),col=4)
+legend("topright", legend=c("Electronic accessories", "Fashion accessories", "Food and beverages"),
+       col=c(2,3,4), lty=1:2, horiz=FALSE, box.lty=0, cex=0.8)
+```
+
+
+# statistical inference
+ 
+## Gross income and City
+ 
+```{r}
+Biedronki$City <- as.factor(Biedronki$City)
+Biedronki$income <- as.numeric(Biedronki$`gross income`)
+
+ggbetweenstats(
+  data  = Biedronki,
+  y     = income,
+  x     = City,
+  title = "Distribution of Gross Income  across City"
+)
+```
+ 
+ Gross income is not significant different in cities.
+ 
+## Rating and Customer type 
+
+```{r}
+Biedronki$Customer <- as.factor(Biedronki$`Customer type`)
+Biedronki$Rating <- as.numeric(Biedronki$Rating)
+
+ggbetweenstats(
+  data  = Biedronki,
+  y     = Rating,
+  x     = Customer,
+  title = "Distribution of Rating across Customer Type"
+)
+```
+
+Rating is not significant different by customer type. 
+
+## Quantatity and Gender
+
+```{r}
+Biedronki$Gender <- as.factor(Biedronki$Gender)
+Biedronki$Quantity <- as.numeric(Biedronki$Quantity)
+
+ggbetweenstats(
+  data  = Biedronki,
+  y     = Quantity,
+  x     = Gender,
+  title = "Distribution of quantatity across gender"
+)
+```
+Quantity (number of products purchased by the customer) is significant different by gender. Women buy more products on average than men.
+
+## Unit price and Product Line
+
+```{r}
+Biedronki$Line <- as.factor(Biedronki$`Product line`)
+Biedronki$Unit <- as.numeric(Biedronki$`Unit price`)
+
+ggbetweenstats(
+  data  = Biedronki,
+  y     = Unit,
+  x     = Line,
+  title = "Distribution of unit price across product line"
+)
+```
+
+ Unit price of each product is not significant different by product line. 
+ 
+## Bivariate Analysis (Correlation)
+ 
+```{r}
+ggcorrmat(
+  data     = Biedronki,
+  colors   = c("#B2182B", "white", "#4D4D4D"),
+  title    = "Correlalogram for Biedronki dataset",
+)
+```
+
  
