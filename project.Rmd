@@ -28,7 +28,13 @@ plot(pressure)
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
+## import database
 ```{r}
+Biedronki <- read_csv("Biedronki.csv")
+```
+
+## libraries
+```{r message=FALSE, warning=FALSE}
 library(rvest)
 library(dplyr)
 library(tidyr)
@@ -460,5 +466,6 @@ ggcorrmat(
   title    = "Correlalogram for Biedronki dataset",
 )
 ```
+Crossed out values indicates no linear relationship. 1 indicates a perfect positive linear relationship.There is a positive correlation (0.63) between unit price and tax 5%, total, cogs and gross income. This suggests that, for example, as the unit price increases, the 5% tax also increases. There is a positive correlation (0.71) between quantity and tax 5%, total, cogs and gross income. This suggests that, for example, as the quantity (the number of products purchased by the customer) increases, the 5% tax also increases.
 
  
