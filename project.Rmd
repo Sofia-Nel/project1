@@ -179,37 +179,47 @@ summary(violated)
 plot(violated)
 ```
 ## Data Visualization
+
 ```{r}
 ggplot(Biedronki,
  aes(x = Biedronki$`Product line`,
- y = Biedronki$`gross income`)) +
+ y = Biedronki$`gross margin percentage`)) +
   geom_col()
 
 ```
+Gross margin percentage from the product lines are similar. The lowest values of gross margin percentage can be observed in the category of health and beauty products. 
 
 ```{r}
 ggplot(data = Biedronki, mapping = aes(x = Branch, y = Biedronki$Rating)) +
-    geom_boxplot()
+    geom_boxplot(color="red")
 ```
+In each branch the rating values range from 4 to 10. There are no outliers. The median rating is similar in all cases and is around 7. All ratings are equally distributed.  Slightly lower ratings can be observed in branch B.
+
 ```{r}
 ggplot(data = Biedronki) + 
   stat_summary(
     mapping = aes(x = City, y = cogs),
     fun.min = min,
     fun.max = max,
-    fun = median
+    fun = median,
+    size = 0.75 
   )
 ```
+The minimum, maximum and median cost of good sold is similar in each city. 
+
+
 ```{r}
 ggplot(Biedronki,
  aes(x = Payment,
- y = Biedronki$`Tax 5%`,
+ y = Biedronki$`gross income`,
  fill = Gender)) +
  geom_col() +
  scale_fill_brewer( palette = "Dark2") +
  facet_grid(~ City)
 ```
-
+In Mandalay, there is no significant difference in gross income between different payment methods. There was not significant gender difference observed with the different payment types. 
+In Naypyitaw, a higher gross income value can be observed for cash payments and a significantly lower one for card payments. Women used card payments more often. 
+In Yangon, the highest gross income was with ewallet payment. There was not a significant gender difference observed for the different payment types.
 
 ## Univariate Statistics
 ## Frequency Tables
