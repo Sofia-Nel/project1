@@ -8,11 +8,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-## Introduction:
-In the bustling landscape of the retail industry, supermarkets play a pivotal role. Our "Biedronki" project out to investigate consumer behaviors that add to the general understanding of Biedronki supermarkets. Our goal is to use data analysis to extract useful data.
-
-
 ## Libraries:
 ```{r message=FALSE, warning=FALSE}
 library(rvest)
@@ -48,7 +43,17 @@ library(gtsummary)
 library(AER)
 library(ggstatsplot)
 library(ggplot2)
+library (readr)
 ```
+
+
+## Import dataset:
+```{r}
+Biedronki <- read_csv("Biedronki.csv")
+```
+
+## Introduction:
+In the bustling landscape of the retail industry, supermarkets play a pivotal role. Our "Biedronki" project out to investigate consumer behaviors that add to the general understanding of Biedronki supermarkets. Our goal is to use data analysis to extract useful data.
 
 ## Missing Values: all the rows are complete:
 
@@ -234,7 +239,7 @@ The summary table reveals that the majority of the observations in the dataset '
 ## Frequency Tables:
 
 ```{r tai, echo=FALSE}
-kbl(tabela1,caption = "Gross income - Biedronka - values in kPLN") %>%
+kbl(tablee1,caption = "Gross income - Biedronka - values in kPLN") %>%
     kable_material(c("striped", "hover"))
 tab1<-classIntervals(Biedronki$`gross income`,n=10,style="fixed",fixedBreaks=seq(0,50,by=10))
 jenks.tests(tab1)
