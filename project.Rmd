@@ -410,6 +410,17 @@ This histogram offers insights into the distribution of gross income in 'Biedron
 
 This visualization effectively compares the income distribution across various product categories, providing a visual understanding of how different types of products contribute to the overall gross income.
 
+## Data Frame Summary:
+```{r warning=FALSE, results="asis"}
+dfSummary(Biedronki,
+          plain.ascii  = FALSE, 
+          style        = "grid", 
+          graph.magnif = 0.75, 
+          valid.col    = FALSE,
+          tmp.img.dir  = "/tmp")
+
+```
+This is a comprehensive summary report for the 'Biedronki' dataset using the dfSummary function. The report includes various statistics and visualizations, it is a valuable tool for initial exploratory data analysis, offering insights into data distributions, missing values, and other key attributes. Overall, this approach facilitates a quick and thorough understanding of the dataset's structure and content.
 
 ## statistical inference:
  
