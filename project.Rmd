@@ -1,6 +1,6 @@
-Title: "Searching for mistakes"
-author: "Sofia Animato"
-date: "2023-11-28"
+Title: "Biedronki"
+author: "Sofia Animato, Nel Mazur"
+date: "2024-01-20"
 output: html_document
 ---
 
@@ -14,13 +14,16 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
+## Introduction:
+In the bustling landscape of the retail industry, supermarkets play a pivotal role. Our "Biedronki" project out to investigate consumer behaviors that add to the general understanding of Biedronki supermarkets. Our goal is to use data analysis to extract useful data.
 
-## import database
+
+## Import dataset:
 ```{r}
 Biedronki <- read_csv("Biedronki.csv")
 ```
 
-## libraries
+## Libraries:
 ```{r message=FALSE, warning=FALSE}
 library(rvest)
 library(dplyr)
@@ -57,16 +60,19 @@ library(ggstatsplot)
 library(ggplot2)
 ```
 
-## Missing Values: all the rows are complete
+## Missing Values: all the rows are complete:
 
 ```{r count-demo, echo=TRUE}
 sum(complete.cases(Biedronki))
 nrow(Biedronki[complete.cases(Biedronki), ])/nrow(Biedronki)*100
 ```
+The analysis reveals that all rows in the "Biedronki" dataset are complete, indicating that there are no missing values across any observation or variable. 
 
 ## Identify outliers: 
 
-# Identified outliers for Total
+The output and the boxplot presents a subset of the dataset containing rows identified as outliers in the: total, cogs, tax 5%, gross income. Grouped by the supermarket branch.
+
+## Identified outliers for Total:
 
 ```{r}
 Biedronki %>%
@@ -78,7 +84,7 @@ Biedronki %>%
 boxplot(Total~Branch, data=Biedronki)
 ```
 
-# Identified outliers for cogs
+## Identified outliers for cogs:
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
@@ -89,7 +95,7 @@ Biedronki %>%
 boxplot(cogs~Branch, data=Biedronki)
 ```
 
-# Identified outliers for Tax 5%
+## Identified outliers for Tax 5%:
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
@@ -100,7 +106,7 @@ Biedronki %>%
 boxplot(Biedronki$`Tax 5%`~Branch, data=Biedronki)
 ```
 
-# Identified outliers for gross income
+## Identified outliers for gross income:
 ```{r}
 Biedronki %>%
   group_by(Branch) %>%
@@ -116,36 +122,38 @@ boxplot(Biedronki$`gross income`~Branch, data=Biedronki)
 
  
  
-## Imputate outliers and data correction
-# Imputate outlier for "Total"
+## Imputate outliers and data correction:
+Imputing outliers for the total, cogs, tax 5%, gross income variables involves replacing extreme values with more moderate values. Capping is method used in this process.
+
+## Imputate outlier for "Total":
 ```{r}
 Biedronki %>%
    mutate(Total_imp = imputate_outlier(Biedronki, Total, method = "capping")) %>%
   summary()
 ```
 
-# Imputate outlier for "Cogs"
+## Imputate outlier for "Cogs":
 ```{r}
 Biedronki %>%
    mutate(Cogs_imp = imputate_outlier(Biedronki, cogs, method = "capping")) %>%
   summary()
 ```
 
-# Imputate outlier for "Tax 5%"
+## Imputate outlier for "Tax 5%":
 ```{r}
 Biedronki %>%
    mutate(Tax_5_imp = imputate_outlier(Biedronki, `Tax 5%`, method = "capping")) %>%
   summary()
 ```
 
-# Imputate outlier for "gross income"
+## Imputate outlier for "gross income":
 ```{r}
 Biedronki %>%
    mutate(gross_income_imp = imputate_outlier(Biedronki, `gross income`, method = "capping")) %>%
   summary()
 ```
 
-## Rules to follow
+## Rules to follow:
 We have the following rules:
 
 -   Gross Income must be positive.
