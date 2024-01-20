@@ -8,11 +8,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ## Introduction:
 In the bustling landscape of the retail industry, supermarkets play a pivotal role. Our "Biedronki" project out to investigate consumer behaviors that add to the general understanding of Biedronki supermarkets. Our goal is to use data analysis to extract useful data.
@@ -80,7 +75,7 @@ Biedronki %>%
   identify_outliers(`Total`)
 ```
 
-```{r boxplot, echo=TRUE}
+```{r}
 boxplot(Total~Branch, data=Biedronki)
 ```
 
@@ -91,7 +86,7 @@ Biedronki %>%
   identify_outliers('cogs')
 ```
 
-```{r boxplot, echo=TRUE}
+```{r}
 boxplot(cogs~Branch, data=Biedronki)
 ```
 
@@ -102,7 +97,7 @@ Biedronki %>%
   identify_outliers(`Tax 5%`)
 ```
 
-```{r boxplot, echo=TRUE}
+```{r}
 boxplot(Biedronki$`Tax 5%`~Branch, data=Biedronki)
 ```
 
@@ -114,7 +109,7 @@ Biedronki %>%
 ```
 
 
-```{r boxplot, echo=TRUE}
+```{r}
 boxplot(Biedronki$`gross income`~Branch, data=Biedronki)
 ```
 
@@ -313,7 +308,7 @@ The descriptive text at the bottom adds context to the visualization, mentioning
 
 ## Summary table 1:
 
-```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+```{r}
 Biedronki$Payment <- factor(Biedronki$Payment)
 
 raport1 <-
@@ -342,7 +337,7 @@ The statistics for gross income across different payment types at Biedronki are 
 
 ##Summary table 2:
 
-```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+```{r}
 raport2 <-
   list("Price in kPLN" =
        list("Min"       = ~ min(Biedronki$`gross income`),
@@ -371,7 +366,7 @@ In summary, the consistent statistical results imply a homogeneous gross income 
 
 ## Summary table 3:
  
-```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+```{r}
 Biedronki$Payment <- factor(Biedronki$Payment)
 
 raport3 <-
