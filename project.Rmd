@@ -163,7 +163,7 @@ RULE <- editset(c("gross_income > 0"))
 RULE <- editset(c("Rating > 6"))
 ```
 
-# How many times the rule has been violated
+# How many times the rule has been violated:
 
 ```{r echo = TRUE}
 violated <- violatedEdits(RULE, Biedronki)
@@ -328,7 +328,10 @@ raport1 <-
             "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
             ))
 tabela1<-summary_table(Biedronki, summaries = raport1, by = c('Payment'))
+```
 
+
+```{r}
 kbl(tabela1, digits = 3,
   caption="Table 1. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
@@ -355,7 +358,10 @@ raport2 <-
             "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
             ))
 tabela2<-summary_table(Biedronki, summaries = raport2, by = c('Customer type'))
+```
 
+
+```{r}
 kbl(tabela2, digits = 2,
   caption="Table 2. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
@@ -386,13 +392,13 @@ raport3 <-
             "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
             ))
 tabela3<-summary_table(Biedronki, summaries = raport3, by = c('Product line'))
+```
 
+```{r}
 kbl(tabela3, digits = 3,
   caption="Table 3. Biedronki - gross income in kPLN by type of product line.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
-
 ```
- 
- 
+
 The statistics presented in Table 3 reveal, again, a consistency in the gross income profiles across different product lines at Biedronki. All key measures of central tendency, including mean and median, show identical values for each product line. The measures of variability such as standard deviation and interquartile range, as well as distribution characteristics like skewness and kurtosis, exhibit no differences at all. The absence of variability in these results across product lines suggests, same as for the costumer types, a uniformity in the financial dynamics of gross income. Product lines seem to contribute equally to the gross income distribution at Biedronki.
 
 This uniformity of gross income distribution across different product lines, may have implications for strategic decision-making, inventory management, and marketing strategies, as the financial patterns do not exhibit significant distinctions among product categories.
