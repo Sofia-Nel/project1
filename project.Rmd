@@ -371,7 +371,7 @@ In summary, the consistent statistical results imply a homogeneous gross income 
 
 ## Summary table 3:
  
-``````{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
+```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
 Biedronki$Payment <- factor(Biedronki$Payment)
 
 raport3 <-
