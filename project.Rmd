@@ -13,11 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 In the bustling landscape of the retail industry, supermarkets play a pivotal role. Our "Biedronki" project out to investigate consumer behaviors that add to the general understanding of Biedronki supermarkets. Our goal is to use data analysis to extract useful data.
 
 
-## Import dataset:
-```{r}
-Biedronki <- read_csv("Biedronki.csv")
-```
-
 ## Libraries:
 ```{r message=FALSE, warning=FALSE}
 library(rvest)
@@ -399,7 +394,7 @@ This uniformity of gross income distribution across different product lines, may
 
 ## Distribution of gross income with a breakdown by product lines:
 
-```{r histogram, echo=FALSE}
+```{r}
 hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
      main="Gross income in kPLN - Biedronki")
 lines(density(Biedronki$`gross income`[Biedronki$`Product line`=="Electronic accessories"]),col=2)
