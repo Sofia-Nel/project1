@@ -14,19 +14,6 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ## import database
 ```{r}
@@ -184,7 +171,10 @@ summary(violated)
 ```{r echo = TRUE}
 plot(violated)
 ```
-## Data Visualization
+
+The analysis reveals only one violation based on the specified rules. This suggests that the dataset 'Biedronki' is generally in compliance with the defined criteria.
+
+## Data Visualization:
 
 ```{r}
 ggplot(Biedronki,
@@ -193,12 +183,14 @@ ggplot(Biedronki,
   geom_col()
 
 ```
+
 Gross margin percentage from the product lines are similar. The lowest values of gross margin percentage can be observed in the category of health and beauty products. 
 
 ```{r}
 ggplot(data = Biedronki, mapping = aes(x = Branch, y = Biedronki$Rating)) +
     geom_boxplot(color="red")
 ```
+
 In each branch the rating values range from 4 to 10. There are no outliers. The median rating is similar in all cases and is around 7. All ratings are equally distributed.  Slightly lower ratings can be observed in branch B.
 
 ```{r}
@@ -211,6 +203,7 @@ ggplot(data = Biedronki) +
     size = 0.75 
   )
 ```
+
 The minimum, maximum and median cost of good sold is similar in each city. 
 
 
@@ -223,13 +216,13 @@ ggplot(Biedronki,
  scale_fill_brewer( palette = "Dark2") +
  facet_grid(~ City)
 ```
+
 In Mandalay, there is no significant difference in gross income between different payment methods. There was not significant gender difference observed with the different payment types. 
 In Naypyitaw, a higher gross income value can be observed for cash payments and a significantly lower one for card payments. Women used card payments more often. 
 In Yangon, the highest gross income was with ewallet payment. There was not a significant gender difference observed for the different payment types.
 
-## Univariate Statistics
-## Frequency Tables
-
+## Univariate Statistics:
+## Summary tables:
 
 ```{r}
 tabl1<-c("0-10 kPLN","10-20 kPLN","20-30 kPLN","30-40 kPLN","40-50 kPLN")
@@ -238,6 +231,10 @@ tablee1<-freq(limits,type="html")
 kbl(tablee1)
 ```
 
+The summary table reveals that the majority of the observations in the dataset 'Biedronki' fall within the first gross income class (0-10 kPLN). This concentration suggests that a significant portion of the data is characterized by lower gross income levels, which may affect the purchasing behaviour of costumers, thus it may be crucial for the developement of commercial and marketing strategies.
+
+## Frequency Tables:
+
 ```{r tai, echo=FALSE}
 kbl(tabela1,caption = "Gross income - Biedronka - values in kPLN") %>%
     kable_material(c("striped", "hover"))
@@ -245,8 +242,9 @@ tab1<-classIntervals(Biedronki$`gross income`,n=10,style="fixed",fixedBreaks=seq
 jenks.tests(tab1)
 ```
 
+The frequency table illustrated below allows for a quick assessment of the prevalence of income levels within the specified ranges, providing valuable insights into the dataset's economic profiles. As well as the summary table presented few lines before, it reveals that the majority of the observations in the dataset 'Biedronki' fall within the first gross income class. This should be, again, a useful information to consider while implementing strategic decisions.
 
-## Basic plots
+## Basic plots:
 
 ```{r histogram, echo=FALSE}
 hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
@@ -258,14 +256,16 @@ legend("topright", legend=c("Yagon", "Naypyitaw", "Mandalay"),
        col=c(2,3,4), lty=1:2, horiz=FALSE, box.lty=0, cex=0.8)
 
 ```
-
+This histogram visually represents the distribution of gross income in the 'Biedronki' dataset. The bars are colored green, and the density plots overlayed in different colors correspond to the cities Yangon, Naypyitaw, and Mandalay. The graph provides a clear depiction of the income distribution, while the density lines highlight potential variations across different cities. The legend at the top-right indicates the city corresponding to each density plot, enhancing the interpretability of the graph.
 
 ```{r boxplot, echo=FALSE}
 boxplot(Biedronki$`gross income`~Biedronki$City)
 
 ```
 
-## ggplot2 plots
+This boxplot illustrates the distribution of gross income in 'Biedronki' across different cities. Each box represents the interquartile range (IQR) of income for a specific city, with the median marked by a line inside each box. The whiskers extend to the minimum and maximum values within 1.5 times the IQR. this boxplot is effective to compare the central tendency and spread of income data between different cities, providing a summary of the dataset's variation across locations.
+
+## ggplot2 plots:
 
 ```{r histogram2, echo=FALSE}
 # Density plot of "price_PLN"
@@ -294,11 +294,16 @@ ggarrange(density.p, stable.p, text.p,
           ncol = 1, nrow = 3,
           heights = c(1, 0.5, 0.3))
 ```
+This composite visualization effectively communicates insights into the distribution of gross income in 'Biedronki' supermarkets across three cities. The density plot provides a visual representation of the income distribution, distinguished by city with a palette of colors. The dashed red lines represent normal density overlays.
+
+The summary table presents key descriptive statistics, including the count, mean, and standard deviation for each city. This provides a concise numerical summary of the income data within each location.
+
+The descriptive text at the bottom adds context to the visualization, mentioning the dataset size and the focus on a random sample of 200 Biedronki supermarkets. Overall, this multifaceted approach enhances the understanding of the gross income distribution in relation to different cities in the dataset. This chart is, again, useful to implement marketing and strategic decisions, especially when it comes to market segmentation and placement of new products; with this concern, it could be the basis for further analysis on consumer's purchasing behaviour and needs based on their provenience.
 
 
+## Summary tables: 
 
-
-## Summary tables (do 2 or 3 examples)
+## Summary table 1:
 
 ```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
 Biedronki$Payment <- factor(Biedronki$Payment)
@@ -325,7 +330,9 @@ kbl(tabela1, digits = 3,
   caption="Table 1. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
- 
+The statistics for gross income across different payment types at Biedronki are exactly the same. This suggests a high degree of uniformity in the distribution of gross income, with no significant variations observed between the payment categories. All measures of central tendency (mean, median) and variability (standard deviation, interquartile range) exhibit identical values for each payment type. Additionally, skewness and kurtosis, indicating the shape of the distribution, show no discernible differences. In summary, the gross income profiles across payment types appear to be remarkably consistent based on the provided statistical analysis.
+
+##Summary table 2:
 
 ```{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
 raport2 <-
@@ -350,6 +357,11 @@ kbl(tabela2, digits = 2,
   caption="Table 2. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
  
+The statistics presented in Table 2 reveal a remarkable consistency in the gross income profiles across different customer types at Biedronki. All key measures of central tendency, including mean and median, show identical values for each customer category. Similarly, measures of variability such as standard deviation (Sd) and interquartile range (IQR), as well as distribution characteristics like skewness and kurtosis, exhibit no differences.The lack of variability across customer types suggests that customers, irrespective of their type, have similar financial behaviors or contribute equally to the gross income distribution at Biedronki.
+
+In summary, the consistent statistical results imply a homogeneous gross income distribution across different customer types, providing valuable insights for Biedronki's understanding of its customer base and informing business strategies accordingly.
+
+## Summary table 3:
  
 ``````{r kable_report2, echo=FALSE, message=FALSE, warning=FALSE}
 Biedronki$Payment <- factor(Biedronki$Payment)
@@ -378,8 +390,11 @@ kbl(tabela3, digits = 3,
 ```
  
  
+The statistics presented in Table 3 reveal, again, a consistency in the gross income profiles across different product lines at Biedronki. All key measures of central tendency, including mean and median, show identical values for each product line. The measures of variability such as standard deviation and interquartile range, as well as distribution characteristics like skewness and kurtosis, exhibit no differences at all. The absence of variability in these results across product lines suggests, same as for the costumer types, a uniformity in the financial dynamics of gross income. Product lines seem to contribute equally to the gross income distribution at Biedronki.
 
+This uniformity of gross income distribution across different product lines, may have implications for strategic decision-making, inventory management, and marketing strategies, as the financial patterns do not exhibit significant distinctions among product categories.
 
+## Distribution of gross income with a breakdown by product lines:
 
 ```{r histogram, echo=FALSE}
 hist(Biedronki$`gross income`, breaks="FD", col="green", probability = TRUE,
@@ -391,10 +406,14 @@ legend("topright", legend=c("Electronic accessories", "Fashion accessories", "Fo
        col=c(2,3,4), lty=1:2, horiz=FALSE, box.lty=0, cex=0.8)
 ```
 
+This histogram offers insights into the distribution of gross income in 'Biedronki' with a breakdown by product lines. The green bars represent the overall distribution, while overlaid density plots in different colors correspond to specific product lines, including Electronic accessories, Fashion accessories, and Food and beverages. The legend at the top-right facilitates interpretation by associating each density plot with its respective product line.
 
-# statistical inference
+This visualization effectively compares the income distribution across various product categories, providing a visual understanding of how different types of products contribute to the overall gross income.
+
+
+## statistical inference:
  
-## Gross income and City
+## Gross income and City:
  
 ```{r}
 Biedronki$City <- as.factor(Biedronki$City)
@@ -408,9 +427,9 @@ ggbetweenstats(
 )
 ```
  
- Gross income is not significant different in cities.
+This plot provides a clear overview of how the distribution of gross income varies between cities. This type of visualization is valuable for identifying potential differences or patterns in income levels across different locations, aiding in the exploration of geographical variations within the dataset. We can conlcude that gross income is not significant different in cities.
  
-## Rating and Customer type 
+## Rating and Customer type: 
 
 ```{r}
 Biedronki$Customer <- as.factor(Biedronki$`Customer type`)
@@ -424,9 +443,9 @@ ggbetweenstats(
 )
 ```
 
-Rating is not significant different by customer type. 
+The resulting plot provides a clear overview of how the distribution of ratings varies between customer types. This type of visualization is valuable for identifying potential differences or patterns in ratings across different customer segments, aiding in the exploration of customer preferences within the dataset. we can conclude that rating is not significant different by customer type.
 
-## Quantatity and Gender
+## Quantatity and Gender:
 
 ```{r}
 Biedronki$Gender <- as.factor(Biedronki$Gender)
@@ -439,9 +458,10 @@ ggbetweenstats(
   title = "Distribution of quantatity across gender"
 )
 ```
-Quantity (number of products purchased by the customer) is significant different by gender. Women buy more products on average than men.
 
-## Unit price and Product Line
+The resulting plot provides a clear overview of how the distribution of quantity varies between genders. This type of visualization is valuable for identifying potential differences or patterns in purchasing behavior across different gender groups, aiding in the exploration of gender-related variations within the dataset.Our conclusion is that Quantity, thus number of products purchased by the customer, is significant different by gender. Indeed, women buy more products on average than men.
+
+## Unit price and Product Line:
 
 ```{r}
 Biedronki$Line <- as.factor(Biedronki$`Product line`)
@@ -455,9 +475,9 @@ ggbetweenstats(
 )
 ```
 
- Unit price of each product is not significant different by product line. 
+ The resulting plot provides a clear overview of how the distribution of unit prices varies across different product lines. This type of visualization is valuable for identifying potential differences or patterns in pricing strategies across product categories, aiding in the exploration of pricing dynamics within the dataset. however, we can conclude that in this case unit price of each product is not significant different by product line.
  
-## Bivariate Analysis (Correlation)
+## Bivariate Analysis (Correlation):
  
 ```{r}
 ggcorrmat(
@@ -466,6 +486,39 @@ ggcorrmat(
   title    = "Correlalogram for Biedronki dataset",
 )
 ```
-Crossed out values indicates no linear relationship. 1 indicates a perfect positive linear relationship.There is a positive correlation (0.63) between unit price and tax 5%, total, cogs and gross income. This suggests that, for example, as the unit price increases, the 5% tax also increases. There is a positive correlation (0.71) between quantity and tax 5%, total, cogs and gross income. This suggests that, for example, as the quantity (the number of products purchased by the customer) increases, the 5% tax also increases.
+
+This analysis creates a correlation matrix plot for the 'Biedronki' dataset. It provides a visual representation of the correlation coefficients. This type of plot is valuable for quickly assessing relationships and dependencies between variables in the dataset. white squares indicate no or weak correlation, we have them mostly for "rating" and "quality", as well as some for "income" and "unit". With regard to the cases in which we have correlation that equals to 1, it indicates a perfect positive linear relationship between the variables. This means that as one variable increases, the other variable also increases proportionally. The variables are perfectly aligned on a straight line. As far as the cases in which correlation equals to 0.63 or 0.71, it indicates a moderately strong positive linear relationship between two variables. The positive sign suggests that as one variable increases, there is a tendency for the other variable to increase as well, but not perfectly.
+
+## Final conclusion and considerations:
+
+In conclusion, the data analysis offers insightful information that the supermarket chain can use as a guide for making strategic decisions. Important conclusions and possible tactics consist of:
+
+##Customer Demographics and Marketing:
+
+Since most observations are made by those with lesser incomes, focused marketing methods for reasonably priced goods and promotions seem to be the best option.
+
+##Geographical Considerations:
+Small differences in gross income between cities point to the possibility of marketing tactics tailored to a particular area. The greatest solutions might be tailored marketing or the launch of certain products for areas based on a regular allocation of gross income across various cities. 
+
+##Gender-Specific Marketing:
+Significant differences in purchasing behavior between genders highlight opportunities for gender-specific marketing campaigns.
+it's crucial to keep in mind that women tend to buy more products on average, so tailor our strategy to each gender's preferences is a must.
+
+##Pricing Strategies:
+Since most customers fall into the category with the lowest total revenue, there is no significant difference in unit prices, making it difficult to maintain a consistent pricing strategy across the product line. Additionally, implementing strategic price promotions and discounts to attract price-sensitive customers, especially low-income groups, can increase sales. Of course, it's important to analyze, monitor, and adjust your advertising strategy based on evolving customer behavior patterns.
+
+##Correlation-Based Strategies:
+try to exploit identified correlations to inform cross-selling or bundling strategies, improving customer engagement and satisfaction. The best behavior would be to consider promotions that capitalize on relationships such as the positive correlation between "rating" and "quantity."
+
+##Market Segmentation Refinement:
+From this dataset we can infer that the most profitable segment may be focused on women, but the observed total income distribution and purchasing Action. Continuing to monitor and collect data on customer behavior is essential for further segmentation and personalized marketing strategies.
+
+##Customer Engagement Programs:
+
+Finally, developing a customer engagement program that rewards loyalty across payment methods, customer types, and product lines will lead to build loyal relationships, which helps to create a ripple effect and a positive word of mouth. For example, to improve overall customer satisfaction, encouraging repeat business through personalized offers and promotions can lead to loyalty and all the positive effects listed above.
+
+Together, these strategies  aim to increase sales, improve customer satisfaction and contribute to the overall success of "Biedronki" supermarkets. Regular analysis and adjustments based on customer behavior and market trends are essential for continued success in the competitive retail industry.
+
+
 
  
