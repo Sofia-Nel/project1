@@ -322,94 +322,44 @@ ggarrange(density.p, stable.p, text.p,
 
 ## Summary table 1: 
 
-The statistics for gross income across different payment types at Biedronki are exactly the same. This suggests a high degree of uniformity in the distribution of gross income, with no significant variations observed between the payment categories. All measures of central tendency (mean, median) and variability (standard deviation, interquartile range) exhibit identical values for each payment type. Additionally, skewness and kurtosis, indicating the shape of the distribution, show no discernible differences. In summary, the gross income profiles across payment types appear to be remarkably consistent based on the provided statistical analysis.
-
+Gross income statistics for individual payment types at Biedronki are similar. This suggests a high degree of uniformity in the distribution of gross income, with no significant differences between payment categories. All measures of central tendency (mean, median) and variability (standard deviation, interquartile range) show similar values for each type of payment. Additionally, skewness and kurtosis, which indicate the shape of the distribution, do not show any noticeable differences. Overall, based on the statistical analysis provided, the gross income profiles across payment types appear remarkably consistent.
 
 ```{r}
-Biedronki$Payment <- factor(Biedronki$Payment)
+Biedronki %>%
+  select(`gross income`,Payment) %>%
+  tbl_summary(label= `gross income` ~ "Table 1. Biedronki - gross income in kPLN by type of payment.",digits=c(`gross income`)~3,by=Payment,type = all_continuous() ~ "continuous2", statistic = all_continuous() ~ c("{N_nonmiss}", "{median}" ,"{p25}", "{p75}", "{min}", "{max}", "{mean}", "{sd}", "{iqr}", "{skewness}", "{kurtosis}"),missing = "no")
 
-raport1 <-
-  list("Price in kPLN" =
-       list("Min"       = ~ min(Biedronki$`gross income`),
-            "Max"       = ~ max(Biedronki$`gross income`),
-            "Q1"        = ~ quantile(Biedronki$`gross income`,0.25),
-            "Median" = ~ round(median(Biedronki$`gross income`),2),
-            "Q3"        = ~ quantile(Biedronki$`gross income`,0.75),
-            "Mean" = ~ round(mean(Biedronki$`gross income`),2),
-            "Sd" = ~ round(sd(Biedronki$`gross income`),2),
-             "IQR" = ~ round(iqr(Biedronki$`gross income`),2),
-            "Sx" = ~ round(iqr(Biedronki$`gross income`)/2,2),
-            "Var %" = ~ round((sd(Biedronki$`gross income`)/mean(Biedronki$`gross income`)),2),
-            "IQR Var %" = ~ round((iqr(Biedronki$`gross income`)/median(Biedronki$`gross income`)),2),
-            "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
-            "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
-            ))
-tabela1<-summary_table(Biedronki, summaries = raport1, by = c('Payment'))
-
-kbl(tabela1, digits = 3,
-  caption="Table 1. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
+
 
 
 ## Summary table 2:
 
-The statistics presented in Table 2 reveal a remarkable consistency in the gross income profiles across different customer types at Biedronki. All key measures of central tendency, including mean and median, show identical values for each customer category. Similarly, measures of variability such as standard deviation (Sd) and interquartile range (IQR), as well as distribution characteristics like skewness and kurtosis, exhibit no differences.The lack of variability across customer types suggests that customers, irrespective of their type, have similar financial behaviors or contribute equally to the gross income distribution at Biedronki.
+The statistics presented in Table 2 indicate consistency of gross income profiles across different customer types at Biedronki. All key measures of central tendency, including mean and median, show similar values for each customer category. Similarly, measures of variability such as standard deviation (SD) and interquartile range (iqr), as well as distribution features such as skewness and kurtosis, do not show significant differences. The lack of variability between customer types suggests that customers, irrespective of their type, have similar financial behaviors or contribute equally to the gross income distribution at Biedronki.
 
 In summary, the consistent statistical results imply a homogeneous gross income distribution across different customer types, providing valuable insights for Biedronki's understanding of its customer base and informing business strategies accordingly.
 
 ```{r}
-raport2 <-
-  list("Price in kPLN" =
-       list("Min"       = ~ min(Biedronki$`gross income`),
-            "Max"       = ~ max(Biedronki$`gross income`),
-            "Q1"        = ~ quantile(Biedronki$`gross income`,0.25),
-            "Median" = ~ round(median(Biedronki$`gross income`),2),
-            "Q3"        = ~ quantile(Biedronki$`gross income`,0.75),
-            "Mean" = ~ round(mean(Biedronki$`gross income`),2),
-            "Sd" = ~ round(sd(Biedronki$`gross income`),2),
-             "IQR" = ~ round(iqr(Biedronki$`gross income`),2),
-            "Sx" = ~ round(iqr(Biedronki$`gross income`)/2,2),
-            "Var %" = ~ round((sd(Biedronki$`gross income`)/mean(Biedronki$`gross income`)),2),
-            "IQR Var %" = ~ round((iqr(Biedronki$`gross income`)/median(Biedronki$`gross income`)),2),
-            "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
-            "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
-            ))
-tabela2<-summary_table(Biedronki, summaries = raport2, by = c('Customer type'))
+Biedronki %>%
+  select(`gross income`,`Customer type`) %>%
+  tbl_summary(label= `gross income` ~ "Table 1. Biedronki - gross income in kPLN by type of customer.",digits=c(`gross income`)~3,by=`Customer type`,type = all_continuous() ~ "continuous2", statistic = all_continuous() ~ c("{N_nonmiss}", "{median}" ,"{p25}", "{p75}", "{min}", "{max}", "{mean}", "{sd}", "{iqr}", "{skewness}", "{kurtosis}"),missing = "no")
 
-kbl(tabela2, digits = 2,
-  caption="Table 2. Biedronki - gross income in kPLN by type of payment.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
+ 
  
 ## Summary table 3:
  
  
-The statistics presented in Table 3 reveal, again, a consistency in the gross income profiles across different product lines at Biedronki. All key measures of central tendency, including mean and median, show identical values for each product line. The measures of variability such as standard deviation and interquartile range, as well as distribution characteristics like skewness and kurtosis, exhibit no differences at all. The absence of variability in these results across product lines suggests, same as for the costumer types, a uniformity in the financial dynamics of gross income. Product lines seem to contribute equally to the gross income distribution at Biedronki.
+The statistics presented in Table 3 reveal, again, a consistency in the gross income profiles across different product lines at Biedronki. All key measures of central tendency, including mean and median, show similar values for each product line. The measures of variability such as standard deviation and interquartile range, as well as distribution characteristics like skewness and kurtosis, exhibit no significant differences at all. The absence of variability in these results across product lines suggests, same as for the costumer types, a uniformity in the financial dynamics of gross income. Product lines seem to contribute equally to the gross income distribution at Biedronki.
 
 This uniformity of gross income distribution across different product lines, may have implications for strategic decision-making, inventory management, and marketing strategies, as the financial patterns do not exhibit significant distinctions among product categories.
  
+
 ```{r}
-Biedronki$Payment <- factor(Biedronki$Payment)
+Biedronki %>%
+  select(`gross income`,`Product line`) %>%
+  tbl_summary(label= `gross income` ~ "Table 1. Biedronki - gross income in kPLN by type of product line.",digits=c(`gross income`)~3,by=`Product line`,type = all_continuous() ~ "continuous2", statistic = all_continuous() ~ c("{N_nonmiss}", "{median}" ,"{p25}", "{p75}", "{min}", "{max}", "{mean}", "{sd}", "{iqr}", "{skewness}", "{kurtosis}"),missing = "no")
 
-raport3 <-
-  list("Price in kPLN" =
-       list("Min"       = ~ min(Biedronki$`gross income`),
-            "Max"       = ~ max(Biedronki$`gross income`),
-            "Q1"        = ~ quantile(Biedronki$`gross income`,0.25),
-            "Median" = ~ round(median(Biedronki$`gross income`),2),
-            "Q3"        = ~ quantile(Biedronki$`gross income`,0.75),
-            "Mean" = ~ round(mean(Biedronki$`gross income`),2),
-            "Sd" = ~ round(sd(Biedronki$`gross income`),2),
-             "IQR" = ~ round(iqr(Biedronki$`gross income`),2),
-            "Sx" = ~ round(iqr(Biedronki$`gross income`)/2,2),
-            "Var %" = ~ round((sd(Biedronki$`gross income`)/mean(Biedronki$`gross income`)),2),
-            "IQR Var %" = ~ round((iqr(Biedronki$`gross income`)/median(Biedronki$`gross income`)),2),
-            "Skewness" = ~  round(skew(Biedronki$`gross income`),2),
-            "Kurtosis" = ~  round(kurtosi(Biedronki$`gross income`),2)
-            ))
-tabela3<-summary_table(Biedronki, summaries = raport3, by = c('Product line'))
-
-kbl(tabela3, digits = 3,
-  caption="Table 3. Biedronki - gross income in kPLN by type of product line.") %>% kable_classic(full_width = F, html_font = "Cambria")%>% kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
 
@@ -560,7 +510,6 @@ From this dataset we can infer that the most profitable segment may be focused o
 Finally, developing a customer engagement program that rewards loyalty across payment methods, customer types, and product lines will lead to build loyal relationships, which helps to create a ripple effect and a positive word of mouth. For example, to improve overall customer satisfaction, encouraging repeat business through personalized offers and promotions can lead to loyalty and all the positive effects listed above.
 
 Together, these strategies  aim to increase sales, improve customer satisfaction and contribute to the overall success of "Biedronki" supermarkets. Regular analysis and adjustments based on customer behavior and market trends are essential for continued success in the competitive retail industry.
-
 
 
  
