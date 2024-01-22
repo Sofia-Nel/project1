@@ -54,7 +54,8 @@ Biedronki <- read_csv("Biedronki.csv")
 
 ## Introduction:
 
-In the bustling landscape of the retail industry, supermarkets play a pivotal role. Our "Biedronki" project out to investigate consumer behaviors that add to the general understanding of Biedronki supermarkets. Our goal is to use data analysis to extract useful data.
+In the bustling landscape of the retail industry, supermarkets stand as indispensable players, serving as the cornerstone of consumer convenience and satisfaction. In the context of this dynamic sector, our research project is intended to explore and comprehend the complexity of consumer behaviours within Biedronki supermarkets. The primary step of our analysis consists of deeply analyse the data through data wrangling operations, in order to prepare them to be further analysed. This phase is followed by data visualization actions that help the readers to better understand the data frame thanks to visual charts that depicts pattern and trends. Eventually, univariate and bivariate statistics are applied to provide a deeper quantitative understanding of the factors influencing consumer behaviors within Biedronki supermarkets.
+Throughout our investigation, Gross income emerges as the core variable, indeed we decided to select it for its representative nature and its potential to unveil insights into consumer dynamics.
 
 ## Missing Values: all the rows are complete:
 
